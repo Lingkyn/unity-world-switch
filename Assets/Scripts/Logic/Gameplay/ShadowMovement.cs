@@ -1,26 +1,17 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+/// <summary>
+/// 影子 2D 移动，只消费 InputIntentAdapter 的移动意图，不直接接输入。
+/// Together 与 ShadowOnly 时影子都响应输入；仅 Player 在 ShadowOnly 时不动（见 PlayerMovement）。
+/// </summary>
 public class ShadowMovement2D : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float fixedZ = 0f; // 影子世界固定Z
 
-    private Vector2 moveInput;
-
-    public void OnMove(InputAction.CallbackContext ctx)
-    {
-        moveInput = ctx.ReadValue<Vector2>();
-    }
-
-    void OnEnable()
-    {
-        moveInput = Vector2.zero;
-    }
-
     void Update()
     {
-        // Together 与 ShadowOnly 时影子都响应输入；仅 Player 在 ShadowOnly 时不动（见 PlayerMovement）
+        Vector2 moveInput = InputIntentAdapter.Instance != null ? InputIntentAdapter.Instance.MoveIntent : Vector2.zero;
         Vector3 delta = new Vector3(moveInput.x, moveInput.y, 0f) * speed * Time.deltaTime;
         transform.position += delta;
 

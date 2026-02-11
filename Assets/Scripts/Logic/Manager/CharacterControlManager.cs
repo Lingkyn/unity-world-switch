@@ -24,12 +24,24 @@ public class CharacterControlManager : MonoBehaviour
             return;
         }
         Instance = this;
+        EventBus.Subscribe<WorldSwitchZoneEntered>(OnWorldSwitchZoneEntered);
     }
 
     void OnDestroy()
     {
         if (Instance == this)
+        {
+            EventBus.Unsubscribe<WorldSwitchZoneEntered>(OnWorldSwitchZoneEntered);
             Instance = null;
+        }
+    }
+
+    void OnWorldSwitchZoneEntered(WorldSwitchZoneEntered e)
+    {
+        if (e.Who == WorldSwitchZoneEntered.EnteredBy.Player)
+            SwitchToShadowOnly();
+        else
+            SwitchToTogether();
     }
 
     public void SwitchToShadowOnly()

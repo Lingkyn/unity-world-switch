@@ -1,6 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+/// <summary>
+/// 玩家 3D 移动与跳跃，只消费 InputIntentAdapter 的意图，不直接接输入。
+/// </summary>
 public class PlayerMovement : MonoBehaviour
 {
     [Header("移动参数")]
@@ -11,14 +13,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airControl = 0.4f;        // 空中可调节程度，0=不能转向
 
     [Header("手感优化（可选）")]
-    [SerializeField] private float moveInputDeadZone = 0.15f; // 摇杆/键盘死区，避免漂移
     [SerializeField] private float coyoteTime = 0.12f;      // 离地后仍可起跳的短暂时间
     [SerializeField] private float jumpBufferTime = 0.15f; // 提前按跳跃在落地时自动起跳
-    [SerializeField] private float groundCheckDistance = 0.2f;
-    [SerializeField] private float groundCheckOffset = 1f;
 
     private CharacterController characterController;
-    private Vector2 moveInput;
     private Vector3 velocity;
     private bool jumpRequested;
     private float lastGroundedTime = -99f;   // 上次着地时间，用于 Coyote Time
@@ -30,22 +28,8 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         if (characterController == null)
         {
-            Debug.LogError("PlayerMovementSystem 需要同一物体上有 CharacterController。", this);
+            Debug.LogError("PlayerMovement 需要同一物体上有 CharacterController。", this);
             enabled = false;
-        }
-    }
-
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        moveInput = context.ReadValue<Vector2>();
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            jumpRequested = true;
-            lastJumpPressTime = Time.time;
         }
     }
 
@@ -54,6 +38,16 @@ public class PlayerMovement : MonoBehaviour
         if (characterController == null) return;
         if (CharacterControlManager.Instance != null && CharacterControlManager.Instance.CurrentMode == CharacterControlManager.ControlMode.ShadowOnly)
             return;
+
+        // 从输入意图适配层取意图（死区已在 Adapter 内处理）
+        if (InputIntentAdapter.Instance != null)
+        {
+            if (InputIntentAdapter.Instance.JumpPressedThisFrame)
+            {
+                jumpRequested = true;
+                lastJumpPressTime = Time.time;
+            }
+        }
 
         bool isGrounded = characterController.isGrounded;
         if (isGrounded)
@@ -90,11 +84,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // 水平移动：死区 + 归一化，空中用 airControl 减弱
-        Vector2 clampedInput = moveInput;
-        if (clampedInput.magnitude < moveInputDeadZone)
-            clampedInput = Vector2.zero;
-        Vector3 move = transform.right * clampedInput.x + transform.forward * clampedInput.y;
+        // 水平移动：意图已含死区，归一化后乘速度，空中用 airControl 减弱
+        Vector2 moveInput = InputIntentAdapter.Instance != null ? InputIntentAdapter.Instance.MoveIntent : Vector2.zero;
+        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         if (move.sqrMagnitude > 1f)
             move.Normalize();
         float effectiveSpeed = moveSpeed * (isGrounded ? 1f : airControl);
@@ -102,17 +94,5 @@ public class PlayerMovement : MonoBehaviour
         velocity.z = move.z * effectiveSpeed;
 
         characterController.Move(velocity * Time.deltaTime);
-    }
-
-    private bool CheckGrounded()
-    {
-        // 从脚底向下打射线（CharacterController 脚底约在 center.y - height/2）
-        Vector3 origin = transform.position + Vector3.down * groundCheckOffset;
-        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, groundCheckDistance))
-        {
-            if (hit.collider.transform != transform && !hit.collider.transform.IsChildOf(transform))
-                return true;
-        }
-        return false;
     }
 }
