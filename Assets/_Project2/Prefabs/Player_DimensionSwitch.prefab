@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8104571564475109003}
   - component: {fileID: 1545973822936353142}
   - component: {fileID: 6363576452764969456}
+  - component: {fileID: 1183484624341409451}
   m_Layer: 0
   m_Name: Player_DimensionSwitch
   m_TagString: Untagged
@@ -29,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5042125401421810689}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.061862, y: -2.5000005, z: 8.061862}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -149,10 +150,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d907aa64e2ef714b9a717202b3a4728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 8
-  gravity: -20
-  airControl: 0.4
-  coyoteTime: 0.12
-  jumpBufferTime: 0.15
+  moveSpeed: 7
+  jumpForce: 13
+  gravity: -30
+  airControl: 0.35
+  coyoteTime: 0.1
+  jumpBufferTime: 0.1
   fixedZ2D: 0
+--- !u!114 &1183484624341409451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5042125401421810689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 867f498a281326d4f9c406f1d42f8d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers: []

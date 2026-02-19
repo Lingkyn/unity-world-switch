@@ -6,9 +6,15 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement_DimensionSwitch : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f, jumpForce = 8f, gravity = -20f;
-    [Range(0f, 1f)] [SerializeField] private float airControl = 0.4f;
-    [SerializeField] private float coyoteTime = 0.12f, jumpBufferTime = 0.15f;
+    [Tooltip("马里奥风格：跑步较快")]
+    [SerializeField] private float moveSpeed = 7f;
+    [Tooltip("马里奥风格：跳跃有力，能跳约 5–6 格高")]
+    [SerializeField] private float jumpForce = 13f;
+    [Tooltip("马里奥风格：下落比上升快，手感紧凑")]
+    [SerializeField] private float gravity = -30f;
+    [Tooltip("马里奥风格：空中转向有限")]
+    [Range(0f, 1f)] [SerializeField] private float airControl = 0.35f;
+    [SerializeField] private float coyoteTime = 0.1f, jumpBufferTime = 0.1f;
     [SerializeField] private float fixedZ2D = 0f;
 
     private CharacterController cc;
