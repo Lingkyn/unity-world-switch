@@ -1,0 +1,20 @@
+{
+    "name": "WorldSwitch.DimensionSwitch.Editor",
+    "rootNamespace": "",
+    "references": [
+        "WorldSwitch.DimensionSwitch",
+        "UnityEditor",
+        "UnityEngine"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
