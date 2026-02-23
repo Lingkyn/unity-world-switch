@@ -4,7 +4,7 @@
 
 每个 _ProjectN 关卡**完全独立**，复制时无需依赖 _Project 或其他 _Project。
 
----
+
 
 ## 项目结构
 
@@ -14,9 +14,8 @@
 | **_Project1** | 3D/2D 双角色控制权切换 | Level1.unity | 3D 角色与 2D 角色在区域内交替响应输入 |
 | **_Project2** | 2D/3D 视角切换         | Level2.unity | Tab 切换正交/透视相机、移动轴向及碰撞 |
 
-详见 [Assets/README.md](Assets/README.md)。
 
----
+
 
 ## 依赖
 
@@ -27,7 +26,7 @@
 | New Input System | 输入 | _Project1、_Project2 |
 | Cinemachine      | 相机 | _Project2            |
 
----
+
 
 ## 快速开始
 
@@ -41,7 +40,7 @@
 
 用 Unity 打开本项目，打开 `Assets/_Project1/Scenes/Level1.unity` 或 `Assets/_Project2/Scenes/Level2.unity` 可直接体验效果。
 
----
+
 
 ## 快速搭建新关卡
 
